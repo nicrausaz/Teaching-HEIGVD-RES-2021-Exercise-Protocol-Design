@@ -3,6 +3,7 @@ package nicrausaz;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 
 public class Server
 {
@@ -27,8 +28,7 @@ public class Server
             try
             {
                 srvSocket = new ServerSocket(lstPort);
-            }
-            catch (IOException e)
+            } catch (IOException e)
             {
                 e.printStackTrace();
             }
@@ -40,8 +40,7 @@ public class Server
                     Socket client = srvSocket.accept();
 
                     new Thread(new Worker(client)).start();
-                }
-                catch (IOException e)
+                } catch (IOException e)
                 {
                     e.printStackTrace();
                 }
