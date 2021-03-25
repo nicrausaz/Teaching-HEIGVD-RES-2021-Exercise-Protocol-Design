@@ -13,6 +13,7 @@ public class Worker implements Runnable
         static final String MULT = "MULT";
         static final String DIV = "DIV";
         static final String POW = "POW";
+        static final String QUIT = "QUIT";
     }
 
     private Socket client;
@@ -51,7 +52,7 @@ public class Worker implements Runnable
 
                 double a = 0, b = 0;
 
-                switch (tokens[0])
+                switch (tokens[0].toUpperCase())
                 {
                     case Commands.LIST:
                         out.println("Available commands are: LIST, ADD, SUB, MULT, POW, DIV");
@@ -126,39 +127,34 @@ public class Worker implements Runnable
                         }
                         out.flush();
                         break;
+                    case Commands.QUIT:
+                        working = false;
+                        break;
                     default:
                         out.println("ERROR CMD_ERR");
                         out.flush();
                 }
 
-                if (received.equalsIgnoreCase("bye"))
-                {
-                    working = false;
-                    // break;
-                }
-
-                received = in.readLine();
+                if (working)
+                    received = in.readLine();
             }
         } catch (IOException e)
         {
             e.printStackTrace();
         }
 
-        if (!working)
+        out.println("Bye !");
+        out.flush();
+
+        try
         {
-            out.println("Bye !");
-            out.flush();
+            client.close();
+            out.close();
+            in.close();
 
-            try
-            {
-                client.close();
-                out.close();
-                in.close();
-
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
